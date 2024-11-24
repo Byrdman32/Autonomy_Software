@@ -61,7 +61,7 @@ TEST(AStarPlannerTest, BoundaryPoint)
     pathplanners::AStar* pAStar = new pathplanners::AStar();
 
     // Initialize start coordinate in AStar object.
-    geoops::UTMCoordinate stStartCoord = geoops::UTMCoordinate(50.0, 50.0);
+    geoops::UTMCoordinate stStartCoord{50.0, 50.0};
     pAStar->SetStartCoordinate(stStartCoord);
 
     size_t siTestValuesLength = 4;
@@ -239,9 +239,9 @@ TEST(AStarPlannerTest, PlanAvoidancePath)
     size_t siTestValuesLength   = 8;
 
     // Create start coordinate for AStar.
-    const double dEastingStart          = 608120.0;
-    const double dNorthingStart         = 4201140.0;
-    const geoops::UTMCoordinate stStart = geoops::UTMCoordinate(dEastingStart, dNorthingStart);
+    const double dEastingStart  = 608120.0;
+    const double dNorthingStart = 4201140.0;
+    const geoops::UTMCoordinate stStart{dEastingStart, dNorthingStart};
 
     // Create goal coordinates for AStar.
     const geoops::UTMCoordinate aGoalCoordinates[siTestValuesLength] = {
@@ -299,9 +299,9 @@ TEST(AStarPlannerTest, ObstacleInitialization)
     pathplanners::AStar* pAStar = new pathplanners::AStar();
 
     // Create obstacle for AStar initialization.
-    const geoops::UTMCoordinate stObstacleCenter   = geoops::UTMCoordinate(608120, 4201140);
-    const double dObstacleSize                     = 3 * constants::ASTAR_NODE_SIZE;
-    const pathplanners::AStar::Obstacle stObstacle = {stObstacleCenter, dObstacleSize};
+    const geoops::UTMCoordinate stObstacleCenter{608120, 4201140};
+    const double dObstacleSize = 3 * constants::ASTAR_NODE_SIZE;
+    const pathplanners::AStar::Obstacle stObstacle{stObstacleCenter, dObstacleSize};
 
     // Add obstacle to AStar.
     pAStar->AddObstacle(stObstacle);
@@ -314,9 +314,9 @@ TEST(AStarPlannerTest, ObstacleInitialization)
 
     // Create obstacle vector for AStar re-initialization.
     std::vector<pathplanners::AStar::Obstacle> vObstacles;
-    const geoops::UTMCoordinate stObstacle2Center   = geoops::UTMCoordinate(608100, 4201100);
-    const double dObstacle2Size                     = 2 * constants::ASTAR_NODE_SIZE;
-    const pathplanners::AStar::Obstacle stObstacle2 = {stObstacle2Center, dObstacle2Size};
+    const geoops::UTMCoordinate stObstacle2Center{608100, 4201100};
+    const double dObstacle2Size = 2 * constants::ASTAR_NODE_SIZE;
+    const pathplanners::AStar::Obstacle stObstacle2{stObstacle2Center, dObstacle2Size};
     vObstacles.emplace_back(stObstacle);
     vObstacles.emplace_back(stObstacle2);
 

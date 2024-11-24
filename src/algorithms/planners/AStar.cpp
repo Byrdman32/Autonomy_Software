@@ -361,9 +361,9 @@ namespace pathplanners
      ******************************************************************************/
     geoops::UTMCoordinate AStar::RoundUTMCoordinate(const geoops::UTMCoordinate& stCoordinateToRound)
     {
-        geoops::UTMCoordinate stRounded = geoops::UTMCoordinate(stCoordinateToRound);
-        stRounded.dEasting              = std::round(stCoordinateToRound.dEasting / constants::ASTAR_NODE_SIZE) * constants::ASTAR_NODE_SIZE;
-        stRounded.dNorthing             = std::round(stCoordinateToRound.dNorthing / constants::ASTAR_NODE_SIZE) * constants::ASTAR_NODE_SIZE;
+        geoops::UTMCoordinate stRounded{stCoordinateToRound};
+        stRounded.dEasting  = std::round(stCoordinateToRound.dEasting / constants::ASTAR_NODE_SIZE) * constants::ASTAR_NODE_SIZE;
+        stRounded.dNorthing = std::round(stCoordinateToRound.dNorthing / constants::ASTAR_NODE_SIZE) * constants::ASTAR_NODE_SIZE;
         return stRounded;
     }
 

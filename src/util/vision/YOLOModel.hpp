@@ -615,7 +615,7 @@ namespace yolomodel
                 InputTensorDimensions GetInputShape(const int nTensorIndex = 0)
                 {
                     // Create instance variables.
-                    InputTensorDimensions stInputDimensions = {0, 0, 0, 0, 0, 0};
+                    InputTensorDimensions stInputDimensions{0, 0, 0, 0, 0, 0};
 
                     // Check if interpreter has been built.
                     if (m_bDeviceOpened)
@@ -652,7 +652,7 @@ namespace yolomodel
                 OutputTensorDimensions GetOutputShape(const int nTensorIndex = 0)
                 {
                     // Create instance variables.
-                    OutputTensorDimensions stOutputDimensions = {0, 0, 0, 0, 0};
+                    OutputTensorDimensions stOutputDimensions{0, 0, 0, 0, 0};
 
                     // Check if interpreter has been built.
                     if (m_bDeviceOpened)

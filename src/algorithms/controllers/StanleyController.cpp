@@ -421,9 +421,9 @@ namespace controllers
         double dOrientNorth = std::cos(dChangeInYawRelToNorth);
 
         // Calculate the UTM coordinate for the center of the agent's front axle.
-        geoops::UTMCoordinate stUTMFrontAxlePos = geoops::UTMCoordinate(stUTMCurrPos);
-        stUTMFrontAxlePos.dEasting              = stUTMCurrPos.dEasting + m_dDistToFrontAxle * dOrientEast;
-        stUTMFrontAxlePos.dNorthing             = stUTMCurrPos.dNorthing + m_dDistToFrontAxle * dOrientNorth;
+        geoops::UTMCoordinate stUTMFrontAxlePos{stUTMCurrPos};
+        stUTMFrontAxlePos.dEasting  = stUTMCurrPos.dEasting + m_dDistToFrontAxle * dOrientEast;
+        stUTMFrontAxlePos.dNorthing = stUTMCurrPos.dNorthing + m_dDistToFrontAxle * dOrientNorth;
 
         // Return the UTM coordinate of the center of the agent's front axle.
         return stUTMFrontAxlePos;

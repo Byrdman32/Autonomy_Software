@@ -404,7 +404,7 @@ class AutonomyThread
         void ParallelizeLoop(const int nNumThreads, const N tTotalIterations, F&& tLoopFunction)
         {
             // Create new thread pool.
-            BS::thread_pool m_thLoopPool = BS::thread_pool(nNumThreads);
+            BS::thread_pool m_thLoopPool{nNumThreads};
 
             m_thLoopPool.detach_blocks(0,
                                        tTotalIterations,
@@ -539,8 +539,8 @@ class AutonomyThread
         // Declare private class member variables.
         /////////////////////////////////////////
 
-        BS::thread_pool m_thMainThread = BS::thread_pool(1);
-        BS::thread_pool m_thPool       = BS::thread_pool(2);
+        BS::thread_pool m_thMainThread{1};
+        BS::thread_pool m_thPool{2};
         std::vector<std::future<T>> m_vPoolReturns;
         std::atomic_bool m_bStopThreads;
         std::atomic<AutonomyThreadState> m_eThreadState;
