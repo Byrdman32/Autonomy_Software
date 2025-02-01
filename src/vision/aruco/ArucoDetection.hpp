@@ -97,7 +97,20 @@ namespace arucotag
     {
         // Grayscale.
         cv::cvtColor(cvInputFrame, cvOutputFrame, cv::COLOR_BGRA2GRAY);
-        cv::filter2D(cvOutputFrame, cvInputFrame, -1, constants::ARUCO_SHARPEN_KERNEL_EXTRA);
+        cv::filter2D(cvOutputFrame, cvInputFrame, -1, constants::ARUCO_SHARPEN_KERNEL_FAST);
+
+        // double alpha = 1.0; /*< Simple contrast control */
+        // int beta     = 2;   /*< Simple brightness control */
+
+        // // Image Contrast
+        // for (int y = 0; y < cvInputFrame.rows; y++)
+        // {
+        //     for (int x = 0; x < cvInputFrame.cols; x++)
+        //     {
+        //         cvOutputFrame.at<uchar>(y, x) = cv::saturate_cast<uchar>(alpha * cvInputFrame.at<uchar>(y, x) + beta);
+        //     }
+        // }
+
         // Reduce number of colors/gradients in the image.
         // imgops::ColorReduce(cvOutputFrame);
         // Denoise (Looks like bilateral filter is req. for ArUco, check speed since docs say it's slow)
@@ -201,6 +214,8 @@ namespace arucotag
         {
             // Draw markers onto normal given image.
             cv::aruco::drawDetectedMarkers(cvDetectionsFrame, cvMarkers, vIDs, cv::Scalar(0, 0, 0));
+            cv::imshow("Display", cvDetectionsFrame);
+            cv::waitKey(1);
         }
         else
         {
