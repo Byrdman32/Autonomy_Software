@@ -37,7 +37,24 @@ namespace arucotag
      *      tag detection.
      *
      *
-     * @author jspencerpittman (jspencerpittman@gmail.com)
+     * @author jspencerpittman (jspencerpittman@gmail.cc/libvorbisdec.c:182: undefined reference to `vorbis_synthesis'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:188: undefined reference to `vorbis_synthesis_pcmout'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:192: undefined reference to `vorbis_synthesis_read'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:183: undefined reference to `vorbis_synthesis_blockin'
+[build] /usr/bin/ld: /usr/local/lib/libavcodec.a(libvorbisdec.o): in function `oggvorbis_decode_init':
+[build] /tmp/ffmpeg/libavcodec/libvorbisdec.c:49: undefined reference to `vorbis_info_init'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:50: undefined reference to `vorbis_comment_init'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:109: undefined reference to `vorbis_synthesis_headerin'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:123: undefined reference to `vorbis_synthesis_init'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:124: undefined reference to `vorbis_block_init'
+[build] /usr/bin/ld: /usr/local/lib/libavcodec.a(libvorbisdec.o): in function `oggvorbis_decode_close':
+[build] /tmp/ffmpeg/libavcodec/libvorbisdec.c:204: undefined reference to `vorbis_block_clear'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:205: undefined reference to `vorbis_dsp_clear'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:206: undefined reference to `vorbis_info_clear'
+[build] /usr/bin/ld: /tmp/ffmpeg/libavcodec/libvorbisdec.c:207: undefined reference to `vorbis_comment_clear'
+[build] collect2: error: ld returned 1 exit status
+[build] gmake[2]: *** [CMakeFiles/Autonomy_Software.dir/build.make:763: Autonomy_Software] Error 1
+[build] gmake[1]: *** [CMakeFiles/Makefile2:132: CMakeFiles/Autonomy_Software.dir/all] Error 2om)
      * @date 2023-09-28
      ******************************************************************************/
     struct ArucoTag
@@ -86,7 +103,7 @@ namespace arucotag
      *      to not alter the original in case it's used after the call to this function
      *      completes.
      *
-     * @param cvInputFrame - cv::Mat of the image to pre-process.
+     * @param cvInputFrame - cv::Mat of the image to pre-process. This image should be in BGR format.
      * @param cvOutputFrame - cv::Mat to write the pre-processed image to.
      *
      * @todo Determine optimal order for speed
@@ -95,6 +112,14 @@ namespace arucotag
      ******************************************************************************/
     inline void PreprocessFrame(const cv::Mat& cvInputFrame, cv::Mat& cvOutputFrame)
     {
+        // Check if the input frame is in BGR format.
+        if (cvInputFrame.channels() != 3)
+        {
+            // Submit logger message.
+            LOG_ERROR(logging::g_qSharedLogger, "PreprocessFrame() requires a BGR image.");
+            return;
+        }
+
         // Grayscale.
         cv::cvtColor(cvInputFrame, cvOutputFrame, cv::COLOR_BGRA2GRAY);
         cv::filter2D(cvOutputFrame, cvInputFrame, -1, constants::ARUCO_SHARPEN_KERNEL_FAST);
@@ -112,7 +137,7 @@ namespace arucotag
         // }
 
         // Reduce number of colors/gradients in the image.
-        // imgops::ColorReduce(cvOutputFrame);
+        imgops::ColorReduce(cvOutputFrame);
         // Denoise (Looks like bilateral filter is req. for ArUco, check speed since docs say it's slow)
         // cv::bilateralFilter(cvInputFrame, cvInputFrame, /*diameter =*/5, /*sigmaColor =*/0.2, /*sigmaSpace =*/3);
         // imgops::CustomBilateralFilter(cvInputFrame, 3, 0.1, 3);
@@ -133,7 +158,7 @@ namespace arucotag
     /******************************************************************************
      * @brief Detect ArUco tags in the provided image.
      *
-     * @param cvFrame - The camera frame to run ArUco detection on. Should be BGR format.
+     * @param cvFrame - The camera frame to run ArUco detection on. Should be BGR format or grayscale.
      * @param cvArucoDetector - The configured aruco detector to use for detection.
      * @return std::vector<ArucoTag> - The resultant vector containing the detected tags in the frame.
      *
